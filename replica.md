@@ -58,6 +58,13 @@ Connect to one of your mongod instances through the mongo shell.
 mongo --port 27017
 ```
 In the mongo shell, use `rs.initiate()` to initiate the replica set.
+Display the current replica configuration by issuing the following command: `rs.conf()`
+Now we have the one server added in replica, lets add the rest of servers.
+```
+rs.add("localhost:27018")
+rs.add("localhost:27019")
+rs.addArb("localhost:27020")
+```
 You can enter the `rs.status()` in the shell prompt to check how many servers are in replica set. All members should have a `health` value of `1`. 
 ```
 rs0:PRIMARY> rs.status()
@@ -209,13 +216,6 @@ State gives more information about the specific state that member is in:
 ```
 The `optimeDate` allows you to see whether a member is behind on the replication sync. The timestamp is the last applied log item so if it’s up to date, it’ll be very close to the current actual time on the server.
 
-Display the current replica configuration by issuing the following command: `rs.conf()`
-Now we have the one server added in replica, lets add the rest of servers.
-```
-rs.add("localhost:27018")
-rs.add("localhost:27019")
-rs.addArb("localhost:27020")
-```
 Test Replication:-
 Connect to the primary member
 ```
