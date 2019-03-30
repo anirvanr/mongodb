@@ -44,7 +44,9 @@ You can tail the oplog
 use local
 db.getCollection('oplog.rs').find()
 ```
-To check the Oplog, connect to the required member instance and run the `rs.printSlaveReplicationInfo()` command. You can demote a primary to a secondary using the stepDown function `rs.stepDown()`.When you start a replica set member for the first time, MongoDB creates an oplog of a default size if you do not specify the oplog size.
+To see the replication status, run `db.printSlaveReplicationInfo()` command on primary. This will show you if the secondaries are up to date or lagging.
+`rs.printReplicationInfo()` shows the configured/default oplog size, which the replication cluster is using currently. The date range shows the start and end date of the MongoDB operations stored in the oplogs.
+You can demote a primary to a secondary using the stepDown function `rs.stepDown()`.When you start a replica set member for the first time, MongoDB creates an oplog of a default size if you do not specify the oplog size.
 For Unix and Windows systems the default oplog size depends on the storage engine:
 
 | Storage Engine            | Default Oplog Size    | Lower Bound | Upper Bound |
@@ -214,7 +216,7 @@ State gives more information about the specific state that member is in:
     7 = Arbiter
     8 = Down
 ```
-The `optimeDate` allows you to see whether a member is behind on the replication sync. The timestamp is the last applied log item so if it’s up to date, it’ll be very close to the current actual time on the server.
+The `optimeDate` allows you to see whether a member is behind on the replication sync. The timestamp is the last applied log item so if it’s up to date, it’ll be very close to the current actual time on the server. Only the node with the latest optime (the timestamp of the most recent oplog record) can be elected as the primary node. 
 
 Test Replication:-
 Connect to the primary member
@@ -250,6 +252,7 @@ The value of priority can be any floating point number between 0 and 1000.
 Specify higher priority values to make a member more eligible to become primary
 Default: 1 for primary/secondary; 0 for arbiters.
 Members with 0 priority can never become primary. These members are called passive members.
+When the primary node finds there is a secondary node with a higher priority, and the data latency on the secondary node is within 10 seconds, the primary node will perform an active stepDown and make the secondary node with a higher priority eligible for being the primary node. 
 
 To configure a delayed secondary member, set its priority value to 0, its hidden value to true, and its slaveDelay value to the number of seconds to delay.
 ```
