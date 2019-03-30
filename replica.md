@@ -58,7 +58,157 @@ Connect to one of your mongod instances through the mongo shell.
 mongo --port 27017
 ```
 In the mongo shell, use `rs.initiate()` to initiate the replica set.
-You can enter the `rs.status()` in the shell prompt to check how many servers are in replica set.
+You can enter the `rs.status()` in the shell prompt to check how many servers are in replica set. All members should have a `health` value of `1`. 
+```
+rs0:PRIMARY> rs.status()
+{
+	"set" : "rs0",
+	"date" : ISODate("2019-03-30T07:02:33.563Z"),
+	"myState" : 1,
+	"term" : NumberLong(1),
+	"syncingTo" : "",
+	"syncSourceHost" : "",
+	"syncSourceId" : -1,
+	"heartbeatIntervalMillis" : NumberLong(2000),
+	"optimes" : {
+		"lastCommittedOpTime" : {
+			"ts" : Timestamp(1553929346, 1),
+			"t" : NumberLong(1)
+		},
+		"readConcernMajorityOpTime" : {
+			"ts" : Timestamp(1553929346, 1),
+			"t" : NumberLong(1)
+		},
+		"appliedOpTime" : {
+			"ts" : Timestamp(1553929346, 1),
+			"t" : NumberLong(1)
+		},
+		"durableOpTime" : {
+			"ts" : Timestamp(1553929346, 1),
+			"t" : NumberLong(1)
+		}
+	},
+	"lastStableCheckpointTimestamp" : Timestamp(1553929320, 1),
+	"members" : [
+		{
+			"_id" : 0,
+			"name" : "localhost:27017",
+			"health" : 1,
+			"state" : 1,
+			"stateStr" : "PRIMARY",
+			"uptime" : 93,
+			"optime" : {
+				"ts" : Timestamp(1553929346, 1),
+				"t" : NumberLong(1)
+			},
+			"optimeDate" : ISODate("2019-03-30T07:02:26Z"),
+			"syncingTo" : "",
+			"syncSourceHost" : "",
+			"syncSourceId" : -1,
+			"infoMessage" : "could not find member to sync from",
+			"electionTime" : Timestamp(1553929318, 2),
+			"electionDate" : ISODate("2019-03-30T07:01:58Z"),
+			"configVersion" : 4,
+			"self" : true,
+			"lastHeartbeatMessage" : ""
+		},
+		{
+			"_id" : 1,
+			"name" : "localhost:27018",
+			"health" : 1,
+			"state" : 2,
+			"stateStr" : "SECONDARY",
+			"uptime" : 22,
+			"optime" : {
+				"ts" : Timestamp(1553929346, 1),
+				"t" : NumberLong(1)
+			},
+			"optimeDurable" : {
+				"ts" : Timestamp(1553929346, 1),
+				"t" : NumberLong(1)
+			},
+			"optimeDate" : ISODate("2019-03-30T07:02:26Z"),
+			"optimeDurableDate" : ISODate("2019-03-30T07:02:26Z"),
+			"lastHeartbeat" : ISODate("2019-03-30T07:02:32.417Z"),
+			"lastHeartbeatRecv" : ISODate("2019-03-30T07:02:33.433Z"),
+			"pingMs" : NumberLong(0),
+			"lastHeartbeatMessage" : "",
+			"syncingTo" : "localhost:27017",
+			"syncSourceHost" : "localhost:27017",
+			"syncSourceId" : 0,
+			"infoMessage" : "",
+			"configVersion" : 4
+		},
+		{
+			"_id" : 2,
+			"name" : "localhost:27019",
+			"health" : 1,
+			"state" : 2,
+			"stateStr" : "SECONDARY",
+			"uptime" : 14,
+			"optime" : {
+				"ts" : Timestamp(1553929346, 1),
+				"t" : NumberLong(1)
+			},
+			"optimeDurable" : {
+				"ts" : Timestamp(1553929346, 1),
+				"t" : NumberLong(1)
+			},
+			"optimeDate" : ISODate("2019-03-30T07:02:26Z"),
+			"optimeDurableDate" : ISODate("2019-03-30T07:02:26Z"),
+			"lastHeartbeat" : ISODate("2019-03-30T07:02:32.417Z"),
+			"lastHeartbeatRecv" : ISODate("2019-03-30T07:02:33.432Z"),
+			"pingMs" : NumberLong(0),
+			"lastHeartbeatMessage" : "",
+			"syncingTo" : "localhost:27017",
+			"syncSourceHost" : "localhost:27017",
+			"syncSourceId" : 0,
+			"infoMessage" : "",
+			"configVersion" : 4
+		},
+		{
+			"_id" : 3,
+			"name" : "localhost:27020",
+			"health" : 1,
+			"state" : 7,
+			"stateStr" : "ARBITER",
+			"uptime" : 7,
+			"lastHeartbeat" : ISODate("2019-03-30T07:02:32.420Z"),
+			"lastHeartbeatRecv" : ISODate("2019-03-30T07:02:32.440Z"),
+			"pingMs" : NumberLong(0),
+			"lastHeartbeatMessage" : "",
+			"syncingTo" : "",
+			"syncSourceHost" : "",
+			"syncSourceId" : -1,
+			"infoMessage" : "",
+			"configVersion" : 4
+		}
+	],
+	"ok" : 1,
+	"operationTime" : Timestamp(1553929346, 1),
+	"$clusterTime" : {
+		"clusterTime" : Timestamp(1553929346, 1),
+		"signature" : {
+			"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			"keyId" : NumberLong(0)
+		}
+	}
+}
+```
+State gives more information about the specific state that member is in:
+```
+    0 = Starting up (phase 1)
+    1 = Primary
+    2 = Secondary
+    3 = Recovering
+    4 = Fatal error
+    5 = Starting up (phase 2)
+    6 = Unknown state
+    7 = Arbiter
+    8 = Down
+```
+The `optimeDate` allows you to see whether a member is behind on the replication sync. The timestamp is the last applied log item so if it’s up to date, it’ll be very close to the current actual time on the server.
+
 Display the current replica configuration by issuing the following command: `rs.conf()`
 Now we have the one server added in replica, lets add the rest of servers.
 ```
@@ -82,6 +232,7 @@ Connect one of your secondary members
 mongo --port 27018
 ``` 
 run: `rs.slaveOk()`
+
 By default, read queries are not allowed on secondary members, above command enable it.
 ```
 use exampleDB
@@ -135,12 +286,33 @@ How to check secondary is synced now or not:
 You can use output of rs.status(). If secondary is synced and wasn't created with slaveDelay option then optime and optimeDate of secondary should be equal or close (if there are current operations) to those of primary. In that case stateStr should be equal to SECONDARY.
 If secondary has been created with slaveDelay then optime and optimeDate can be different but stateStr and lastHeartbeatMessage will indicate if there is some lag.
 
+The voting is done by a `majority of voting members`(over 50%).
 
+Imagine a Replica Set with three (voting) members. Let's say that Node A is primary, and nodes B+C are secondaries. Node A goes down, so nodes B+C go to election. They still do form a majority (two out of three ie 66%). The election is first decided by priority. If both Nodes B & C have the same priority, then the one who is most up to date in respect to the failed primary (oplog) wins. Let's say it's Node B. Once node A comes back alive, there is no new election. Node B remains the master, and C+A are now secondaries. You can change this by setting the priority of the servers. So if the old Primary Node A comes back online it will become the Primary again.
+```
+var conf = rs.config()
+```
+The Primary is the first in the members array.
+```
+conf.members[0].priority = 10
+```
+Apply the new configuration. This needs to be done from the current Primary.
+```
+rs.reconfig(conf)
+```
+On the other hand, if two nodes go down you don't have a majority, so the replica set can't accept updates (apply writes) any more until at least one of the two failing servers becomes alive (and connected by the single surviving node) again.
 
+Imagine now a Replica Set with four (voting) members. Let's say that Node A is primary, and nodes B+C+D are secondaries. Node A goes down, so nodes B+C+D go to election. They of course form majority (three out of four)
 
+However, if two nodes go down you don't have a majority (two out of four), so the replica set is again at read only mode.
 
+So that's why an odd number is recommended; If you loose a single member in a 3 members replica set, it's the same as loosing a single member in a 4 members replica set: you still gain quorum majority and a new primary can be elected (the RS can still elect a new master by majority). On the other hand, if you loose two members in a 3 members replica set or a 4 members replica set (or n/2 members of n-members replica set) - again - the impact is the same: No new leader can be voted by election.
 
+So, to make a long story short, there is no redundancy gain by having an even number of members in a replica set.
 
+There are times when you need to do work on the primary server in a replica set. To do this you need to take the server out of the replica set temporarly. To do this you can use the `rs.stepDown(seconds)` command. For example, to step down a server for 3 minutes:
+```
+rs.stepDown(60*3)
+```
 
-
-
+Sometimes you may need to work on a Secondary server and you need to ensure that it does not become a Primary while you are working on it. To do this you can issue a `rs.freeze(seconds)` to temporarly stop the Secondary from becoming a Primary.
