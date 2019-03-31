@@ -324,9 +324,7 @@ The balancer will begin migrating chunks so that the cluster will achieve balanc
 
 ##Remove a shard server
 
-To remove a shard you must ensure the shard’s data is migrated to the remaining shards in the cluster. To successfully migrate data from a shard, the balancer process must be enabled `sh.getBalancerState()`. To determine the name of the shard `db.adminCommand({listShards: 1})`. The `shards._id` field lists the name of each shard.
-`db.adminCommand({removeShard: "shard0002"})`
-The removeShard command responds with a message indicating that the removal process has started. Each database in a sharded cluster has a primary shard. If the shard you want to remove is also the primary of one of the cluster’s databases, removeShard lists the database in the dbsToMove field. To finish removing the shard, you must either move the database to a new shard after migrating all data from the shard or drop the database, deleting the associated data files.
+To remove a shard you must ensure the shard’s data is migrated to the remaining shards in the cluster. To successfully migrate data from a shard, the balancer process must be enabled `sh.getBalancerState()`. To determine the name of the shard `db.adminCommand({listShards: 1})`. The `shards._id` field lists the name of each shard. To initiate this process execute `db.adminCommand({removeShard: "shard0002"})`. This command responds with a message indicating that the removal process has started. Each database in a sharded cluster has a primary shard. If the shard you want to remove is also the primary of one of the cluster’s databases, removeShard lists the database in the dbsToMove field. To finish removing the shard, you must either move the database to a new shard after migrating all data from the shard or drop the database, deleting the associated data files.
 ```
 mongos> sh.status()
 ....
