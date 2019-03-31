@@ -305,7 +305,7 @@ Totals
  Shard shard0001 contains 37.07% data, 37.07% docs in cluster, avg obj size on shard : 72B
  Shard shard0000 contains 62.92% data, 62.92% docs in cluster, avg obj size on shard : 72B
 ```
-NOTE: The system will need some time to split the chunk to the specified size.
+NOTE: The system will need some time to split the chunk to the specified size.The mongos instance may initially place all the chunks on one shard, but over time it will rebalance the shard set to evenly distribute data among all the shards by moving chunks around. thus, the number of records stored in a given shard may change from moment to moment. 
 
 ##Convert a Replica Set to a Sharded Cluster
 
@@ -321,7 +321,95 @@ This method must be run on a mongos instance.<br/>
 When you add a shard to a sharded cluster, you affect the balance of chunks among the shards of a cluster for all existing sharded collections.<br/>
 The balancer is a background process that manages chunk migrations.<br/>
 The balancer will begin migrating chunks so that the cluster will achieve balance.<br/>
+
+##Remove a shard server
+
+To remove a shard you must ensure the shard’s data is migrated to the remaining shards in the cluster. To successfully migrate data from a shard, the balancer process must be enabled `sh.getBalancerState()`. To determine the name of the shard `db.adminCommand({listShards: 1})`. The `shards._id` field lists the name of each shard.
+`db.adminCommand({removeShard: "shard0002"})`
+The removeShard command responds with a message indicating that the removal process has started. Each database in a sharded cluster has a primary shard. If the shard you want to remove is also the primary of one of the cluster’s databases, removeShard lists the database in the dbsToMove field. To finish removing the shard, you must either move the database to a new shard after migrating all data from the shard or drop the database, deleting the associated data files.
+```
+mongos> sh.status()
+....
+databases:
+    ...
+    ...
+      {  "_id" : "mydb",  "primary" : "shard0002",  "partitioned" : false,  "version" : {  "uuid" : UUID("81304a0f-72de-4ef8-81d5-e1b0e5674f46"),  "lastMod" : 1 } }
+      {  "_id" : "students",  "primary" : "shard0000",  "partitioned" : true,  "version" : {  "uuid" : UUID("dfc2d66e-1066-469e-9e7f-0a77d55218e7"),  "lastMod" : 1 } }
+....
+```
+```
+mongos> db.adminCommand({removeShard: "shard0002"})
+{
+	"msg" : "draining started successfully",
+	"state" : "started",
+	"shard" : "shard0002",
+	"note" : "you need to drop or movePrimary these databases",
+	"dbsToMove" : [
+		"mydb"
+	],
+	"ok" : 1,
+	"operationTime" : Timestamp(1554056395, 3),
+	"$clusterTime" : {
+		"clusterTime" : Timestamp(1554056395, 3),
+		"signature" : {
+			"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			"keyId" : NumberLong(0)
+		}
+	}
+}
+```
+You can check the progress of the draining process by reissuing the removeShard command. 
+Continue checking the status of the removeShard command until the number of chunks remaining is 0 `"chunks" : NumberLong(0)`.
+```
+mongos> db.adminCommand({removeShard: "shard0002"})
+{
+	"msg" : "draining ongoing",
+	"state" : "ongoing",
+	"remaining" : {
+		"chunks" : NumberLong(0),
+		"dbs" : NumberLong(1)
+	},
+	"note" : "you need to drop or movePrimary these databases",
+	"dbsToMove" : [
+		"mydb"
+	],
+	"ok" : 1,
+	"operationTime" : Timestamp(1554056705, 1),
+	"$clusterTime" : {
+		"clusterTime" : Timestamp(1554056705, 1),
+		"signature" : {
+			"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			"keyId" : NumberLong(0)
+		}
+	}
+}
+```
+You have a database still on that shard, i.e. the shard0002 shard is the primary for the "mydb" database.  So, you need to run:
+`db.adminCommand( { movePrimary : "mydb", to : "shard0001" } )`
+(or shard0000 if you prefer, of course)
+Then, re-run the removeshard command and you should get the success message.
+```
+mongos> db.adminCommand({removeShard: "shard0002"})
+{
+	"msg" : "removeshard completed successfully",
+	"state" : "completed",
+	"shard" : "shard0002",
+	"ok" : 1,
+	"operationTime" : Timestamp(1554057008, 2),
+	"$clusterTime" : {
+		"clusterTime" : Timestamp(1554057008, 2),
+		"signature" : {
+			"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			"keyId" : NumberLong(0)
+		}
+	}
+}
+```
+Once the value of the state field is “completed”, you may safely stop the instances
+
+
 Refer:
+
 https://docs.mongodb.com/manual/tutorial/convert-replica-set-to-replicated-shard-cluster/
 
 https://docs.mongodb.com/manual/tutorial/remove-shards-from-cluster/
