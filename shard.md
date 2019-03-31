@@ -307,9 +307,13 @@ Totals
 NOTE: The system will need some time to split the chunk to the specified size.
 
 ##Convert a Replica Set to a Sharded Cluster
+
 Restart secondary members with the --shardsvr option
+
 Login to primary and run `rs.stepDown()`
+
 Restart the primary with the --shardsvr option
+
 Start the config servers and mongos
 
 Refer:
