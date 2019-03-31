@@ -1,4 +1,4 @@
-# Mongodb Shard
+# Mongo Shard
 Sharding is a concept in MongoDB, which splits large data sets into small data sets across multiple MongoDB instances. 
 A sharded setup of mongodb requires the following:
 ```
