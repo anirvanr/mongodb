@@ -403,7 +403,7 @@ mongos> db.adminCommand({removeShard: "shard0002"})
 	}
 }
 ```
-Once the value of the state field is “completed”, you may safely stop the instances
+Once the value of the state field is “completed”, you may safely stop the instance.
 
 
 Refer:
