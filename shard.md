@@ -314,5 +314,7 @@ Start the config servers and mongos
 
 Refer:
 https://docs.mongodb.com/manual/tutorial/convert-replica-set-to-replicated-shard-cluster/
+
 https://docs.mongodb.com/manual/tutorial/remove-shards-from-cluster/
+
 http://dbversity.com/removeshard/
