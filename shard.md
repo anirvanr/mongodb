@@ -308,13 +308,10 @@ NOTE: The system will need some time to split the chunk to the specified size.
 
 ##Convert a Replica Set to a Sharded Cluster
 
-Restart secondary members with the --shardsvr option
-
-Login to primary and run `rs.stepDown()`
-
-Restart the primary with the --shardsvr option
-
-Start the config servers and mongos
+Restart secondary members with the --shardsvr option<br/>
+Login to primary and run `rs.stepDown()`<br/>
+Restart the primary with the --shardsvr option<br/>
+Start the config servers and mongos<br/>
 
 Refer:
 https://docs.mongodb.com/manual/tutorial/convert-replica-set-to-replicated-shard-cluster/
