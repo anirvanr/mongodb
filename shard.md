@@ -314,6 +314,12 @@ Login to primary and run `rs.stepDown()`<br/>
 Restart the primary with the --shardsvr option<br/>
 Start the config servers and mongos<br/>
 
+##Add a shard server
+To add a shard server to the shard cluster, prepare the new shard server and add it to the shard cluster with the addShard command `sh.addShard("localhost:27022")`<br/>
+This method must be run on a mongos instance.<br/>
+When you add a shard to a sharded cluster, you affect the balance of chunks among the shards of a cluster for all existing sharded collections.<br/>
+The balancer is a background process that manages chunk migrations.<br/>
+The balancer will begin migrating chunks so that the cluster will achieve balance.<br/>
 Refer:
 https://docs.mongodb.com/manual/tutorial/convert-replica-set-to-replicated-shard-cluster/
 
