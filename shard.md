@@ -230,6 +230,7 @@ mongos> use config
 mongos> db.settings.save({_id:"chunksize", value: 1})
 mongos> sh.addShard("localhost:27020")
 mongos> sh.addShard("localhost:27021")
+mongos> db.adminCommand({listShards: 1})
 mongos> sh.enableSharding("students")
 mongos> use students
 mongos> sh.shardCollection("students.grades", {"student_id" : 1})
