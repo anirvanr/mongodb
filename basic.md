@@ -28,27 +28,27 @@ features of mongodb:-
 6. Any field in a MongoDB document can be indexed
 ```
 
-connect to local mongodb, default port: 27017 `mongo`
-connect to remote mongodb `mongo host:port/db -u usr -p pwd`
-mongodb connect URI format `mongodb://usr:pwd@host:port/db`
-check the version `db.version()`
-get stats about MongoDB server, type the command `db.stats()`
-get data size and index size in MB `db.stats(1024*1024)`
-show all databases `show dbs`
-check your currently selected database, use the command `db`
-create a database, say, testdb `use testdb`
-add a collection `db.createCollection("cities")`
-show all collections in a database `show collections`
-insert a record in the collection `db.cities.insert({"name":"Paris","country":"France"})`
-display list of records of a collection `db.cities.find().pretty()`
-see one document from a collection `db.cities.findOne()`
-drop the collection `db.cities.drop()`
-remove all documents from a collection `db.cities.remove({})`
-delete a database `use testdb` `db.dropDatabase()`
+* connect to local mongodb, default port: 27017 `mongo`
+* connect to remote mongodb `mongo host:port/db -u usr -p pwd`
+* mongodb connect URI format `mongodb://usr:pwd@host:port/db`
+* check the version `db.version()`
+* get stats about MongoDB server, type the command `db.stats()`
+* get data size and index size in MB `db.stats(1024*1024)`
+* show all databases `show dbs`
+* check your currently selected database, use the command `db`
+* create a database, say, testdb `use testdb`
+* add a collection `db.createCollection("cities")`
+* show all collections in a database `show collections`
+* insert a record in the collection `db.cities.insert({"name":"Paris","country":"France"})`
+* display list of records of a collection `db.cities.find().pretty()`
+* see one document from a collection `db.cities.findOne()`
+* drop the collection `db.cities.drop()`
+* remove all documents from a collection `db.cities.remove({})`
+* delete a database `use testdb` `db.dropDatabase()`
 
 __Remove Vs Drop__
 
-Remove: remove documents from a collection but doesn't get rid of the collection (or associated indexes)
+Remove: remove documents from a collection but doesn't get rid of the collection (or associated indexes)\
 Drop: remove documents/collection/indexes
 
 
