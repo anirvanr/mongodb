@@ -1,10 +1,10 @@
 SQL vs NoSQL
 ```
-1.	SQL databases use structured query language (SQL) for defining and manipulating data. SQL requires that you use predefined schemas to determine the structure of your data before you work with it. A NoSQL database, on the other hand, has dynamic schema for unstructured data.
+1. SQL databases use structured query language (SQL) for defining and manipulating data. SQL requires that you use predefined schemas to determine the structure of your data before you work with it. A NoSQL database, on the other hand, has dynamic schema for unstructured data.
 
-2.	In most situations, SQL databases are vertically scalable, which means that you can increase the load on a single server by increasing things like CPU, RAM or SSD. NoSQL databases, on the other hand, are horizontally scalable. This means that you handle more traffic by sharding, or adding more servers in your NoSQL database.
+2. In most situations, SQL databases are vertically scalable, which means that you can increase the load on a single server by increasing things like CPU, RAM or SSD. NoSQL databases, on the other hand, are horizontally scalable. This means that you handle more traffic by sharding, or adding more servers in your NoSQL database.
 
-3.	SQL databases are table-based, while NoSQL databases are either document-based, key-value pairs, graph databases or wide-column stores.
+3. SQL databases are table-based, while NoSQL databases are either document-based, key-value pairs, graph databases or wide-column stores.
 ```
 
 There are 4 basic types of NoSQL database. They are as follows: –
@@ -14,8 +14,8 @@ Document store NoSQL database - CouchDB
 Column store NoSQL database - Cassandra
 Graph-based NoSQL database - Neo4J
 ```
-MongoDB is a document-oriented (do) database, not a relational one. Non-relational means it does not store data in tables but in the form of JSON document.
-A document is a set of key-value pairs.
+MongoDB is a document-oriented (do) database, not a relational one. Non-relational means it does not store data in tables but in the form of JSON document.\
+A document is a set of key-value pairs.\
 Collection is a group of MongoDB documents.
 
 features of mongodb:-
