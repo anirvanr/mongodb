@@ -96,9 +96,10 @@ Profiler has 3 profiling levels
 ```
 For example, the following command sets the profiling level for the current database to 1 and the slow operation threshold is 1000 milliseconds `db.setProfilingLevel(1, 1000)`. Database will log operations slower than 1000 milliseconds into `system.profile` collection. Now you can query for the data against this collection and analize: `db.system.profile.find().pretty()`.
 
-get current profiling level `db.getProfilingLevel()`
-check current profiling status `db.getProfilingStatus()`
-set profiling for all operations `db.setProfilingLevel(2)`
+* get current profiling level `db.getProfilingLevel()`
+* check current profiling status `db.getProfilingStatus()`
+* set profiling for all operations `db.setProfilingLevel(2)`
+
 ```
 > use test
 > db.setProfilingLevel(2)
@@ -147,20 +148,20 @@ set profiling for all operations `db.setProfilingLevel(2)`
 	"user" : ""
 }
 ```
-•	Op field stores the type of operation.
-•	Ns field stores target database and collection name
-•	Nreturned stores the number of documents returned by the query
-•	Millis contains the actual time in milliseconds taken by this query to execute
+•	Op field stores the type of operation.\
+•	Ns field stores target database and collection name\
+•	Nreturned stores the number of documents returned by the query\
+•	Millis contains the actual time in milliseconds taken by this query to execute\
 •	Ts stores the timestamp of the query
 
 NOTE: If you plan to use profiler in a production environment, then you should do proper testing because it can impact on your database throughput especially when you are logging all the queries i.e profiling level is set to 2. You can set you profiler on per database, for that you have to first select you database. And then execute profiler commands.
 
 When the db.collection.find () function is used to search for documents in the collection, the result returns a pointer to the collection of documents returned which is called a __`cursor`__. By default, the cursor will be iterated automatically when the result of the query is returned.
 
-show number of documents in the collection `db.books.find().count()`
-limit the number of documents to return `db.books.find().limit(2)`
-return the result set after skipping the first n number of documents `db.books.find().skip(2)`
-sort the documents in a result set in ascending order of field values `db.books.find().sort({title : 1})`
+* show number of documents in the collection `db.books.find().count()`
+* limit the number of documents to return `db.books.find().limit(2)`
+* return the result set after skipping the first n number of documents `db.books.find().skip(2)`
+* sort the documents in a result set in ascending order of field values `db.books.find().sort({title : 1})`
 
 __`Capped Collection`__: A collection created with a cap (limit on size and number of documents).
 `db.createCollection("AuditTrail", {capped : true, size : 1000, max : 10 })`
