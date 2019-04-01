@@ -208,6 +208,18 @@ ObjectId field is automatically included and can be excluded by setting a 0 for 
 > db.examples.find({subject:"Joe"},{_id:0,likes:1})
 { "likes" : 60 }
 ```
-
-
+__Journaling__
+```
+MongoDB uses a journal to ensure data integrity. 
+This is accomplished through writing data first to the journal files and then to the core data files. 
+If your mongod process stops in an unexpected manner, data from the journal will be used to re-apply the write operations when it is restarted.
+MongoDB creates, when journaling is enabled, a subdirectory for the journal data called journal under the dbPath directory which is /data/db by default.
+MongoDB added journaling since 2.0 it’s been enabled by default.
+Every write to a mongod is first to send to an in memory journal.
+After 100ms (configurable), journal entries are then written to a disk journal on disk in $DB_PATH/journal/*
+Data is read from the Journal on disk and written to the database every 60 seconds or after 2GB of journal entries are written, whichever comes first.
+Journal files are removed after a clean shutdown.
+On a crash of MongoDB, mongod will replay the journal on reboot.
+The write to the disk journal every 10ms instead of every 100ms: db.adminCommand({ "setParameter": 1, "journalCommitInterval": 10 })
+```
 
