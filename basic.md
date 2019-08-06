@@ -223,3 +223,5 @@ On a crash of MongoDB, mongod will replay the journal on reboot.
 The write to the disk journal every 10ms instead of every 100ms: db.adminCommand({ "setParameter": 1, "journalCommitInterval": 10 })
 ```
 
+https://medium.com/@dilipkumar/standalone-mongodb-on-kubernetes-cluster-19e7b5896b27
+
