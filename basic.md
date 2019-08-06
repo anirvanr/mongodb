@@ -226,3 +226,5 @@ The write to the disk journal every 10ms instead of every 100ms: db.adminCommand
 https://medium.com/@dilipkumar/standalone-mongodb-on-kubernetes-cluster-19e7b5896b27
 
 https://medium.com/rahasak/enable-mongodb-authentication-with-docker-1b9f7d405a94
+
+https://medium.com/mongoaudit/how-to-enable-authentication-on-mongodb-b9e8a924efac
